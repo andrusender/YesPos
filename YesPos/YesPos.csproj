@@ -47,9 +47,11 @@
       <HintPath>System\Dll\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
     <Reference Include="WebKit.Interop, Version=533.0.0.0, Culture=neutral, PublicKeyToken=b967213f6d29a3be, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -110,12 +112,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="System\Html\css\" />
-    <Folder Include="System\Html\js\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="System\Dll\INIFileParser.dll" />
     <Content Include="System\Dll\Newtonsoft.Json.dll" />
     <Content Include="System\Html\images\incoming.png" />
+    <Content Include="System\Html\js\firebug-lite.js" />
     <Content Include="System\Html\NetworkError.html" />
     <Content Include="System\Html\PrinterSettingsDialog.html" />
     <Content Include="System\Html\SplashScreen.html" />

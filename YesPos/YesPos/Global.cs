@@ -10,10 +10,11 @@ namespace YesPos
         public static string IniPath = Global.AppDir + @"\System\Configuration.ini";
         public static string HtmlPath = Global.AppDir + @"\System\Html\";
         public static string ImagePath = Global.AppDir + @"\System\Html\images\";
+        public static string JsPath = Global.AppDir + @"\System\Html\js\";
         
-        public static string getSystemUrl(string htmlFile)
+        public static string getSystemUrl(string path)
         {
-            var path = Global.HtmlPath + htmlFile+".html";
+            //var path = Global.HtmlPath + htmlFile+".html";
             string url = new Uri(path, UriKind.Absolute).AbsoluteUri;
             return url;
         }

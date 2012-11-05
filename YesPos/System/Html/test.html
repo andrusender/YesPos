@@ -4,9 +4,10 @@
 <h1>Printing</h1>
 <code>
     <pre>   
-        <a href="javascript:system.print_html('<center><b>H</b>ell<u>o</u></center>')">system.print_html(string html);</a><br />
+        <a href="javascript:system.print_html('<center><b>H</b>ell<u>o</u><img src=\'http://eat24hours.com/static/v4/images/new/eat24_logoN7.png?e24v=56\'></center>')">system.print_html(string html);</a><br />
         <a href="javascript:system.print()">system.print();</a><br />
-        <a href="javascript:system.print_url('http://eat24hours.com')">system.print_url(string url);</a>        
+        <a href="javascript:system.print_url('http://eat24hours.com')">system.print_url(string url);</a><br />
+        <a href="javascript:alert(system.get_printers())">system.get_printers();</a>
     </pre>
 </code>
 <p>
@@ -93,10 +94,12 @@
            Image: "incoming.png",
            //Image: "http://cdn1.iconfinder.com/data/icons/prettyoffice/48/forward.png",
            OnClick: "alert('x')",
-           Height: 200
         };
        system.notification(JSON.stringify(options));
-   }    
+   }
+
+   
+
 </script>
 <h1>Clipboard</h1>
 <code>
@@ -110,10 +113,12 @@
 <code>
     <pre>
         <a href="">string context_menu_add_item(string ids_path, string text, string image, string OnClick);</a><br />
+        <a href="">string context_menu_add_separator(string ids_path)</a><br />
         <a href="">context_menu_remove_item(ids_path);</a>
         <script>
             var id, id2, id3;
         </script>        
+        <a href="javascript:id4=system.context_menu_add_separator('')">Add Separator</a>
         <a href="javascript:id=system.context_menu_add_item('', 'Hello World', 'incoming.png', '')">Add Item</a>
         <a href="javascript:id2=system.context_menu_add_item(id, 'Hello World Sub', 'incoming.png', '')">Add SubItem</a>
         <a href="javascript:id3=system.context_menu_add_item(id2, 'Hello World Sub Sub', 'incoming.png', 'alert(\'Clicked\')')">Add SubSubItem</a>

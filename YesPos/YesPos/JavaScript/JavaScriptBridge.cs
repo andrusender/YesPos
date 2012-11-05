@@ -48,11 +48,14 @@ namespace YesPos
             
         public void print_html(string html)
         {
-            long uniqueID = DateTime.Now.Ticks;
-            string temp = System.IO.Path.GetTempPath() + "_yespos_printing_"+uniqueID + ".html";
-            string url = new Uri(temp, UriKind.Absolute).AbsoluteUri;
-            System.IO.File.WriteAllText(temp,html);
-            print_url(url);
+            var webTemp = new WebKit.WebKitBrowser();
+            F.Controls.Add(webTemp);
+            webTemp.DocumentText = html;
+            webTemp.DocumentCompleted += (sender, e) =>
+            {
+                webTemp.Print();
+                F.Controls.Remove(webTemp);
+            };
         }
         #endregion;
 
@@ -91,7 +94,6 @@ namespace YesPos
                 }
                 else
                 {
-                    //F.getWebBrowser().StringByEvaluatingJavaScriptFromString("alert('Error!\nImage Does Not Found!\n" + Global.ImagePath + options.Image + "');");
                     F.getWebBrowser().StringByEvaluatingJavaScriptFromString("alert('Error!\\nImage not Found!\\n" + (Global.ImagePath + addr).Replace("\\", "/") + "');");
                 }
             }
@@ -158,12 +160,25 @@ namespace YesPos
         #endregion;
 
         #region ContextMenu
+        public string context_menu_add_separator(string ids_path_string)
+        {
+            return context_menu_add_item(ids_path_string, "", "", "");
+        }
         public string context_menu_add_item(string ids_path_string, string text, string image, string OnClick)
         {
             string result="";
             var ids_path = String.IsNullOrEmpty(ids_path_string)?null:ids_path_string.Split(',');
             var menu = F.getContextMenuStrip();
-            var new_item= String.IsNullOrEmpty(image)?new ToolStripMenuItem(text):new ToolStripMenuItem(text, getImageByAddress(image));
+            ToolStripItem new_item = null;
+            if (String.IsNullOrEmpty(text) && String.IsNullOrEmpty(image) && String.IsNullOrEmpty(OnClick))
+            {
+                new_item = new ToolStripSeparator();
+            }
+            else
+            {
+                new_item = String.IsNullOrEmpty(image) ? new ToolStripMenuItem(text) : new ToolStripMenuItem(text, getImageByAddress(image));
+            }
+            
             if (!String.IsNullOrEmpty(OnClick))
             {
                 new_item.Click += (sender, e) => { F.getWebBrowser().StringByEvaluatingJavaScriptFromString(escapeJs(OnClick)); };
@@ -181,7 +196,7 @@ namespace YesPos
                     item = (item == null) ? (ToolStripMenuItem)menu.Items[int.Parse(ids_path[i])] : (ToolStripMenuItem)item.DropDownItems[int.Parse(ids_path[i])];                    
                 }
                 result += item.DropDownItems.Add(new_item);                
-            }
+            }            
             return result;
         }
         public void context_menu_remove_item(string ids_path_string)

@@ -27,7 +27,7 @@ namespace YesPos
         public static string get(string section,string key)
         {
             self = (self==null)?new Ini(Global.IniPath):self;
-            return self.ConfigHandler[section][key].Replace("$(AppDir)", Global.AppDir);
+            return self.ConfigHandler[section][key];
         }
     }
 }
