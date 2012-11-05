@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B4AD3D84-CBB4-49AC-B58E-B8CB36A5FDF1}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>YesPos</RootNamespace>
+    <AssemblyName>YesPos</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="INIFileParser, Version=1.7.1.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>System\Dll\INIFileParser.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>System\Dll\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="WebKit.Interop, Version=533.0.0.0, Culture=neutral, PublicKeyToken=b967213f6d29a3be, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>System\Webkit\WebKit.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="WebKitBrowser, Version=0.5.0.0, Culture=neutral, PublicKeyToken=b967213f6d29a3be, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>System\Webkit\WebKitBrowser.dll</HintPath>
+    </Reference>
+    <Reference Include="WebKitCore, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b967213f6d29a3be, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>System\Webkit\WebKitCore.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="YesPos\Global.cs" />
+    <Compile Include="YesPos\JavaScript\JavaScriptBridge.cs" />
+    <Compile Include="YesPos\JavaScript\NotificationOptions.cs" />
+    <Compile Include="YesPos\WebViewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="YesPos\Ini.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="YesPos\WebViewForm.resx">
+      <DependentUpon>WebViewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="System\Configuration.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="System\Webkit\CFLite.resources\CFCharacterSetBitmaps.bitmap" />
+    <None Include="System\Webkit\CFLite.resources\CFUniCharPropertyDatabase.data" />
+    <None Include="System\Webkit\CFLite.resources\CFUnicodeData-L.mapping" />
+    <None Include="System\Webkit\CFLite.resources\Info.plist" />
+    <None Include="System\Webkit\JavaScriptCore.resources\Info.plist" />
+    <None Include="System\Webkit\WebKit.resources\certificates\cacert.pem" />
+    <None Include="System\Webkit\WebKit.resources\Info.plist" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="System\Html\css\" />
+    <Folder Include="System\Html\js\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="System\Dll\INIFileParser.dll" />
+    <Content Include="System\Dll\Newtonsoft.Json.dll" />
+    <Content Include="System\Html\images\incoming.png" />
+    <Content Include="System\Html\NetworkError.html" />
+    <Content Include="System\Html\PrinterSettingsDialog.html" />
+    <Content Include="System\Html\SplashScreen.html" />
+    <Content Include="System\Html\test.html" />
+    <Content Include="System\Webkit\CFLite.dll" />
+    <Content Include="System\Webkit\icudt40.dll" />
+    <Content Include="System\Webkit\icuin40.dll" />
+    <Content Include="System\Webkit\icuuc40.dll" />
+    <Content Include="System\Webkit\JavaScriptCore.dll" />
+    <Content Include="System\Webkit\JSCore.dll" />
+    <Content Include="System\Webkit\libcurl.dll" />
+    <Content Include="System\Webkit\libeay32.dll" />
+    <Content Include="System\Webkit\libexslt.dll" />
+    <Content Include="System\Webkit\libxml2.dll" />
+    <Content Include="System\Webkit\libxslt.dll" />
+    <Content Include="System\Webkit\objc.dll" />
+    <Content Include="System\Webkit\pthreadVC2.dll" />
+    <Content Include="System\Webkit\SQLite3.dll" />
+    <Content Include="System\Webkit\ssleay32.dll" />
+    <Content Include="System\Webkit\WebKit.dll" />
+    <Content Include="System\Webkit\WebKit.Interop.dll" />
+    <Content Include="System\Webkit\WebKitBrowser.dll" />
+    <Content Include="System\Webkit\WebKitCore.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NotificationWindow\NotificationWindow.csproj">
+      <Project>{605006EB-D4E6-4312-A293-3A43FAC43240}</Project>
+      <Name>NotificationWindow</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>xcopy "$(ProjectDir)\System\Webkit\*" "$(TargetDir)" /E /I /F /Y
+xcopy "$(ProjectDir)\System\Html\*" "$(TargetDir)\System\Html\" /E /I /F /Y</PreBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
