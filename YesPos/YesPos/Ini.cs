@@ -4,30 +4,38 @@ using System.Text;
 using IniParser;
 namespace YesPos
 {
-    class Ini
+    class Config
     {
         private IniParser.IniData ConfigHandler;
         private IniParser.FileIniDataParser FileHandler;
         private string FilePath;
-        private static Ini self;
-        
-        private Ini(string path)
+        private static Config self;
+
+        private Dictionary<string, string> ReplacingData = new Dictionary<string, string>();
+
+        private Config(string path)
         {
             FilePath = path;
             FileHandler = new FileIniDataParser();
-            ConfigHandler = FileHandler.LoadFile(path);            
+            ConfigHandler = FileHandler.LoadFile(path);
+            //Fill Dictionary
+            ReplacingData.Add("$(root)",Global.AppDir);
         }
 
         public static void save()
         {
-            self = (self == null) ? new Ini(Global.IniPath) : self;
+            self = (self == null) ? new Config(Global.IniPath) : self;
             self.FileHandler.SaveFile(self.FilePath, self.ConfigHandler);
         }
 
         public static string get(string section,string key)
         {
-            self = (self==null)?new Ini(Global.IniPath):self;
-            return self.ConfigHandler[section][key];
+            self = (self==null)?new Config(Global.IniPath):self;
+            string temp = self.ConfigHandler[section][key];
+            foreach (KeyValuePair<string,string> data in self.ReplacingData){
+                temp = temp.Replace(data.Key,data.Value);
+            }
+            return temp;
         }
     }
 }

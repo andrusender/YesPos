@@ -13,7 +13,7 @@ namespace YesPos
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new WebViewForm());
+            Application.Run(new WebViewForm(Global.getSystemUrl(Config.get("system","startUrl"))));
         }
     }
 }

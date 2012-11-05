@@ -4,6 +4,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Net;
+using System.Drawing.Printing;
+using Newtonsoft.Json;
 namespace YesPos
 {
     class JavaScriptBridge
@@ -12,7 +14,20 @@ namespace YesPos
         public JavaScriptBridge(WebViewForm f)
         {
             F = f;
-        }        
+        }
+
+        #region Form
+            //TODO MINIMUM FORM SIZE FROM JS
+        public void set_window_minimum_size(string width, string height)
+        {
+            F.MinimumSize = new Size(int.Parse(width), int.Parse(height));
+        }
+        public void change_icon(string icon, string text,string text_size, string color)
+        {
+            DynamicIcon di = new DynamicIcon(F);
+            di.Refresh(icon, text, int.Parse(text_size), System.Drawing.ColorTranslator.FromHtml(color));
+        }
+        #endregion;
 
         #region Printing
         public string[] get_printers()
@@ -28,31 +43,61 @@ namespace YesPos
             return result;
         }
 
-        public void print()
+        public string get_paper_sizes()
+        {
+            PrinterSettings ps = new PrinterSettings();
+            List<object> yps = new List<object>();
+            foreach (PaperSize p in ps.PaperSizes)
+            {
+                yps.Add(new { PaperName = p.PaperName, Width = inch2mm(p.Width), Height = inch2mm(p.Height) });
+            }
+            return JsonConvert.SerializeObject(yps);
+        }     
+
+        private PrintOptions applyPrintOptionsFromString(string options,ref WebKit.WebKitBrowser web)
+        {
+            //Get User Params
+            PrintOptions po = Newtonsoft.Json.JsonConvert.DeserializeObject<PrintOptions>(options);
+            //Converting
+            po.marginLeft = mm2inch(po.marginLeft);
+            po.marginTop = mm2inch(po.marginTop);
+            po.marginRight = mm2inch(po.marginRight);
+            po.marginBottom = mm2inch(po.marginBottom);
+            //Apply Options
+            web.PageSettings.PaperSize = new System.Drawing.Printing.PaperSize("YesPos", mm2inch(po.paperWidth), mm2inch(po.paperHeight));
+            web.PageSettings.Margins = new System.Drawing.Printing.Margins(po.marginLeft, po.marginRight, po.marginTop, po.marginBottom);
+            web.PageSettings.PrinterSettings.PrinterName = po.printer;
+            return po;
+        }
+        
+        public void print(string options)
         {
             var web = F.getWebBrowser();
+            applyPrintOptionsFromString(options, ref web);
             web.Print();
         }
 
-        public void print_url(string url)
+        public void print_url(string url,string options)
         {
-            var webTemp = new WebKit.WebKitBrowser();
+            var webTemp = new WebKit.WebKitBrowser();            
             F.Controls.Add(webTemp);
             webTemp.Navigate(url);
-            webTemp.DocumentCompleted += (sender, e) => { 
+            webTemp.DocumentCompleted += (sender, e) => {
+                applyPrintOptionsFromString(options, ref webTemp);
                 webTemp.Print();
                 F.Controls.Remove(webTemp);
             };
             webTemp.Error += (sender, e) => { F.Controls.Remove(webTemp); };
         }    
             
-        public void print_html(string html)
+        public void print_html(string html, string options)
         {
             var webTemp = new WebKit.WebKitBrowser();
             F.Controls.Add(webTemp);
             webTemp.DocumentText = html;
             webTemp.DocumentCompleted += (sender, e) =>
             {
+                applyPrintOptionsFromString(options, ref webTemp);
                 webTemp.Print();
                 F.Controls.Remove(webTemp);
             };
@@ -99,6 +144,7 @@ namespace YesPos
             }
             return result;
         }
+       
         private string escapeJs(string js)
         {
             return "(function(window){" + js + "})(window);";

@@ -4,10 +4,38 @@
 <h1>Printing</h1>
 <code>
     <pre>   
-        <a href="javascript:system.print_html('<center><b>H</b>ell<u>o</u><img src=\'http://eat24hours.com/static/v4/images/new/eat24_logoN7.png?e24v=56\'></center>')">system.print_html(string html);</a><br />
-        <a href="javascript:system.print()">system.print();</a><br />
-        <a href="javascript:system.print_url('http://eat24hours.com')">system.print_url(string url);</a><br />
-        <a href="javascript:alert(system.get_printers())">system.get_printers();</a>
+        <script>
+            var printers = system.get_printers();
+            var printer_options = {
+                printer: printers[0],
+                marginLeft:10,
+                marginRight:10,
+                marginTop:10,
+                marginBottom:10,
+                paperWidth:2100,
+                paperHeight:297
+            }
+            var pjson = JSON.stringify(printer_options);
+            //system.print(pjson);
+            
+            function setcookie(name, value, expires, path, domain, secure) {    // Send a cookie
+                //
+                // +   original by: Jonas Raoni Soares Silva (http://www.jsfromhell.com)
+                expires instanceof Date ? expires = expires.toGMTString() : typeof (expires) == 'number' && (expires = (new Date(+(new Date) + expires * 1e3)).toGMTString());
+                var r = [name + "=" + escape(value)], s, i;
+                for (i in s = { expires: expires, path: path, domain: domain }) {
+                    s[i] && r.push(i + "=" + s[i]);
+                }
+                return secure && r.push("secure"), document.cookie = r.join(";"), true;
+            }
+            //setcookie("name", "Sender", 24 * 60 * 60);
+            //alert(document.cookie);
+        </script>
+        <a href="javascript:system.print_html('<center><b>H</b>ell<u>o</u><img src=\'http://eat24hours.com/static/v4/images/new/eat24_logoN7.png?e24v=56\'></center>',pjson)">system.print_html(string html);</a><br />
+        <a href="javascript:system.print(pjson)">system.print();</a><br />
+        <a href="javascript:system.print_url('http://eat24hours.com',pjson)">system.print_url(string url);</a><br />
+        <a href="javascript:alert(system.get_printers())">system.get_printers();</a><br />
+        <a href="javascript:alert(system.get_paper_sizes())">system.get_paper_sizes();</a>
     </pre>
 </code>
 <p>
@@ -126,5 +154,14 @@
         <a href="javascript:system.context_menu_remove_item(id)">Delete Item</a>
         <a href="javascript:system.context_menu_remove_item(id2)">Delete SubItem</a>
         <a href="javascript:system.context_menu_remove_item(id3)">Delete SubSubItem</a>
+    </pre>
+</code>
+
+<h1>Form</h1>
+<code>
+    <pre>
+    <input type="text" id="icon" />
+        <a href="javascript:system.set_window_minimum_size(1024, 768)">system.set_window_minimum_size(int width, int height)</a> <br />
+        <a href="javascript:system.change_icon('yespos.png', document.getElementById('icon').value,'20','#ffffff')">system.change_icon(string path, string text, int text_size, string color)</a>   path - only image name (*.png) (in Html/images/)
     </pre>
 </code>
