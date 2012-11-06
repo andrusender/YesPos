@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Forms;
 using WebKit;
 using System.Drawing;
+using System.IO;
 namespace YesPos
 {
     class WebViewForm:Form
@@ -11,7 +12,7 @@ namespace YesPos
         private System.ComponentModel.IContainer components;
         private ContextMenuStrip contextMenuStrip;
         private ToolStripMenuItem copyToolStripMenuItem;
-        private WebKitBrowser Web;
+        private MyWebKitBrowser Web;
         private bool firstRun = true;
         private Panel splashPanel;
         public WebViewForm(string start_url)
@@ -35,19 +36,28 @@ namespace YesPos
         
         private void InitializeWebBrowser(string start_url)
         {            
-            //Initialization
-            Web = new WebKitBrowser();
+            //Initialization            
+            Web = new MyWebKitBrowser();
             Web.AllowDownloads = false;
             Web.AllowNewWindows = true;
             Web.Dock = DockStyle.Fill;
             Web.ObjectForScripting = new JavaScriptBridge(this);
+            Web.AllowFireBug = bool.Parse(Config.get("firebug", "enabled"));
+            Web.FireBugOptions = new MyWebKitBrowser.FireBugOptionsStruct() {
+                overrideConsole = bool.Parse(Config.get("firebug", "overrideConsole")), 
+                startInNewWindow = bool.Parse(Config.get("firebug", "startInNewWindow")), 
+                enableTrace = bool.Parse(Config.get("firebug", "enableTrace")), 
+                startOpened = bool.Parse(Config.get("firebug", "startOpened")) 
+            };
+            Web.AllowPlugins = bool.Parse(Config.get("system","plugins"));
             Web.ContextMenuStrip = contextMenuStrip;
-            Web.Click += (sender, e) => { this.Close(); };            
+            
             //Events 
             Web.Error += (sender, e) => { Web.Navigate(Global.getSystemUrl(Global.HtmlPath + "NetworkError.html")); };
             Web.DocumentTitleChanged += (sender, e) => { Text = Web.DocumentTitle; };
             Web.DocumentCompleted += (sender, e) =>
             {
+                Web.Focus();
                 if (firstRun)
                 {
                     firstRun = false;
@@ -55,30 +65,16 @@ namespace YesPos
                     splashPanel.Dispose();
                 }
                 Text = Web.DocumentTitle;
-                if (bool.Parse(Config.get("firebug", "enabled")))
-                {
-                    string firebug_params = String.Format("overrideConsole: {0}, startInNewWindow: {1},startOpened: {2},enableTrace: {3}", Config.get("firebug", "overrideConsole"), Config.get("firebug", "startInNewWindow"), Config.get("firebug", "startOpened"), Config.get("firebug", "enableTrace"));
-                    Web.StringByEvaluatingJavaScriptFromString(@"var script = document.createElement('script');script.src = '" + Global.getSystemUrl(Global.JsPath + "firebug-lite.js").Replace("file:///", "file://") + "';script.innerHTML = '{" + firebug_params + "}';document.getElementsByTagName('head')[0].appendChild(script);");
-                }
-            };
-            Web.Navigated += (sender, e) =>
-            {
-                Web.StringByEvaluatingJavaScriptFromString("window.system = window.external");
-                Web.StringByEvaluatingJavaScriptFromString(@"document.addEventListener('contextmenu', function(event) { event.preventDefault();}, false);");
-                Web.Show();
-            };
-            Web.ShowJavaScriptAlertPanel += (sender, e) => { MessageBox.Show(e.Message, Web.DocumentTitle, MessageBoxButtons.OK, MessageBoxIcon.Exclamation); };
-            Web.ShowJavaScriptConfirmPanel += (sender, e) => { e.ReturnValue = (DialogResult.Yes == MessageBox.Show(e.Message, Web.DocumentTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Question)); };
-            Web.ShowJavaScriptPromptPanel += (sender, e) => { e.ReturnValue = Microsoft.VisualBasic.Interaction.InputBox(e.Message, Web.DocumentTitle, e.DefaultValue); };
-            
+            };            
             //Add To Controls
-            Controls.Add(Web);
-            
+            Controls.Add(Web);            
             //Navigation            
             Web.Navigate(start_url);            
         }
 
-        public WebKitBrowser getWebBrowser()
+
+
+        public MyWebKitBrowser getWebBrowser()
         {
             return Web;
         }
@@ -129,7 +125,7 @@ namespace YesPos
             {
                 Clipboard.SetText(Web.SelectedText);
             }
-            catch { }
+            finally { }
         }
     }
 }

@@ -13,6 +13,24 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>c:\yespos\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ProductName>YesPos</ProductName>
+    <PublisherName>eat24hours.com</PublisherName>
+    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -44,13 +62,32 @@
     <StartupObject>YesPos.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetZone>Internet</TargetZone>
+    <TargetZone>Custom</TargetZone>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>false</GenerateManifests>
+    <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>63E8ADE49506291BEC63E97B34C5DD38039C2B1A</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>YesPos_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>true</DelaySign>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="INIFileParser, Version=1.7.1.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
@@ -95,6 +132,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="YesPos\Ini.cs" />
+    <Compile Include="YesPos\MyWebKitBrowser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -131,11 +171,10 @@
     <None Include="System\Webkit\WebKit.resources\Info.plist" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="System\Dll\" />
     <Folder Include="System\Html\css\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="System\Dll\INIFileParser.dll" />
-    <Content Include="System\Dll\Newtonsoft.Json.dll" />
     <None Include="System\Html\images\patterns_gray.png" />
     <None Include="System\Html\images\logo_yes.png" />
     <Content Include="System\Html\images\yespos.ico" />
@@ -144,12 +183,12 @@
     <Content Include="System\Html\PrinterSettingsDialog.html" />
     <Content Include="System\Html\SplashScreen.html" />
     <Content Include="System\Html\test.html" />
+    <Content Include="System\Plugins\simple.js" />
     <Content Include="System\Webkit\CFLite.dll" />
     <Content Include="System\Webkit\icudt40.dll" />
     <Content Include="System\Webkit\icuin40.dll" />
     <Content Include="System\Webkit\icuuc40.dll" />
     <Content Include="System\Webkit\JavaScriptCore.dll" />
-    <Content Include="System\Webkit\JSCore.dll" />
     <Content Include="System\Webkit\libcurl.dll" />
     <Content Include="System\Webkit\libeay32.dll" />
     <Content Include="System\Webkit\libexslt.dll" />
@@ -160,9 +199,6 @@
     <Content Include="System\Webkit\SQLite3.dll" />
     <Content Include="System\Webkit\ssleay32.dll" />
     <Content Include="System\Webkit\WebKit.dll" />
-    <Content Include="System\Webkit\WebKit.Interop.dll" />
-    <Content Include="System\Webkit\WebKitBrowser.dll" />
-    <Content Include="System\Webkit\WebKitCore.dll" />
     <Content Include="yespos.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -171,10 +207,28 @@
       <Name>NotificationWindow</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>xcopy "$(ProjectDir)\System\Webkit\*" "$(TargetDir)" /E /I /F /Y
-xcopy "$(ProjectDir)\System\Html\*" "$(TargetDir)\System\Html\" /E /I /F /Y</PreBuildEvent>
+xcopy "$(ProjectDir)\System\Html\*" "$(TargetDir)\System\Html\" /E /I /F /Y
+xcopy "$(ProjectDir)\System\Plugins\*" "$(TargetDir)\System\Plugins\" /E /I /F /Y</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

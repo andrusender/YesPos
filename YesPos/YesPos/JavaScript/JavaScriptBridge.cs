@@ -54,10 +54,18 @@ namespace YesPos
             return JsonConvert.SerializeObject(yps);
         }     
 
-        private PrintOptions applyPrintOptionsFromString(string options,ref WebKit.WebKitBrowser web)
+        private PrintOptions applyPrintOptionsFromString(string options,ref MyWebKitBrowser web)
         {
+            PrintOptions po;
             //Get User Params
-            PrintOptions po = Newtonsoft.Json.JsonConvert.DeserializeObject<PrintOptions>(options);
+            try
+            {
+                po = Newtonsoft.Json.JsonConvert.DeserializeObject<PrintOptions>(options);
+            }
+            finally
+            {
+                po = new PrintOptions();
+            }
             //Converting
             po.marginLeft = mm2inch(po.marginLeft);
             po.marginTop = mm2inch(po.marginTop);
@@ -69,17 +77,50 @@ namespace YesPos
             web.PageSettings.PrinterSettings.PrinterName = po.printer;
             return po;
         }
-        
+
+        public void set_default_print_options(string options)
+        {
+            try
+            {
+                PrintOptions po = Newtonsoft.Json.JsonConvert.DeserializeObject<PrintOptions>(options);
+                Properties.Settings.Default.printerOptions = Newtonsoft.Json.JsonConvert.SerializeObject(options);
+                Properties.Settings.Default.Save();
+            }
+            finally
+            {
+                F.getWebBrowser().StringByEvaluatingJavaScriptFromString("alert('Incorrect PrintOptions!')");
+            }
+            
+            return;
+        }
+
+        public string get_default_print_options()
+        {
+            if (Properties.Settings.Default.printerOptions != "")
+            {
+                return Properties.Settings.Default.printerOptions;
+            }
+            else
+            {
+                PrintOptions po = new PrintOptions();
+                Properties.Settings.Default.printerOptions = Newtonsoft.Json.JsonConvert.SerializeObject(po);
+                Properties.Settings.Default.Save();
+                return Properties.Settings.Default.printerOptions;
+            }
+        }
+
         public void print(string options)
         {
-            var web = F.getWebBrowser();
+            if (String.IsNullOrEmpty(options)) options = get_default_print_options();            
+            var web = F.getWebBrowser();            
             applyPrintOptionsFromString(options, ref web);
             web.Print();
         }
 
         public void print_url(string url,string options)
         {
-            var webTemp = new WebKit.WebKitBrowser();            
+            if (String.IsNullOrEmpty(options)) options = get_default_print_options();
+            var webTemp = new MyWebKitBrowser();            
             F.Controls.Add(webTemp);
             webTemp.Navigate(url);
             webTemp.DocumentCompleted += (sender, e) => {
@@ -92,7 +133,8 @@ namespace YesPos
             
         public void print_html(string html, string options)
         {
-            var webTemp = new WebKit.WebKitBrowser();
+            if (String.IsNullOrEmpty(options)) options = get_default_print_options();
+            var webTemp = new MyWebKitBrowser();
             F.Controls.Add(webTemp);
             webTemp.DocumentText = html;
             webTemp.DocumentCompleted += (sender, e) =>

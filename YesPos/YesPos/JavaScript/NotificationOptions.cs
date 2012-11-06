@@ -12,9 +12,9 @@ namespace YesPos.JavaScript
         public string ButtonHoverColor = "#ffffff";
         public string ContentHoverColor = "#3e8af3";
         public string CloseButtonBorderColor = "#3e8af3";
-        public string Title;
-        public string Content;
-        public string Image;
+        public string Title="";
+        public string Content="";
+        public string Image="";
 
         public int Width = 350;
         public int Height = 80;
@@ -42,6 +42,6 @@ namespace YesPos.JavaScript
         public int ContentPaddingsTop = 0;
         public int ContentPaddingsBottom = 10;
 
-        public string OnClick;
+        public string OnClick="";
     }
 }
