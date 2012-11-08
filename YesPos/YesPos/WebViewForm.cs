@@ -12,16 +12,21 @@ namespace YesPos
         private System.ComponentModel.IContainer components;
         private ContextMenuStrip contextMenuStrip;
         private ToolStripMenuItem copyToolStripMenuItem;
-        private MyWebKitBrowser Web;
+        private _WebKitBrowser Web;
         private bool firstRun = true;
+        private NotifyIcon mynotifyicon;
+        private ContextMenuStrip trayContextMenuStrip;
+        private ToolStripMenuItem exitToolStripMenuItem;
         private Panel splashPanel;
         public WebViewForm(string start_url)
             : base()
-        {
+        {            
             InitializeComponent();
+            this.MinimumSize = new Size(int.Parse(Config.get("system", "minWidth")), int.Parse(Config.get("system", "minHeight")));
+            
             splashPanel= new Panel();
             splashPanel.BackColor = Color.White;
-            splashPanel.BackgroundImage = Bitmap.FromFile(Global.ImagePath+"yespos_logo.png");
+            splashPanel.BackgroundImage = Bitmap.FromFile(Config.get("system","splashImage"));
             splashPanel.Dock = DockStyle.Fill;
             splashPanel.BackgroundImageLayout = ImageLayout.Center;
             Controls.Add(splashPanel);            
@@ -29,21 +34,24 @@ namespace YesPos
             t.Interval = 1;
             t.Start();
             t.Tick += (sender,e) => {
-                InitializeWebBrowser(start_url);
+                Dispatcher.Invoke(this, () => { 
+                    InitializeWebBrowser(start_url);
+                });
                 t.Stop();
-            };            
+            };
+            this.FormClosed += (sender, e) => { mynotifyicon.Visible = false; };
         }
         
         private void InitializeWebBrowser(string start_url)
         {            
             //Initialization            
-            Web = new MyWebKitBrowser();
+            Web = new _WebKitBrowser();
             Web.AllowDownloads = false;
             Web.AllowNewWindows = true;
             Web.Dock = DockStyle.Fill;
-            Web.ObjectForScripting = new JavaScriptBridge(this);
+            Web.RegisterJsObject("system",new JavaScriptHandler(this));
             Web.AllowFireBug = bool.Parse(Config.get("firebug", "enabled"));
-            Web.FireBugOptions = new MyWebKitBrowser.FireBugOptionsStruct() {
+            Web.FireBugOptions = new _WebKitBrowser.FireBugOptionsStruct() {
                 overrideConsole = bool.Parse(Config.get("firebug", "overrideConsole")), 
                 startInNewWindow = bool.Parse(Config.get("firebug", "startInNewWindow")), 
                 enableTrace = bool.Parse(Config.get("firebug", "enableTrace")), 
@@ -53,7 +61,9 @@ namespace YesPos
             Web.ContextMenuStrip = contextMenuStrip;
             
             //Events 
-            Web.Error += (sender, e) => { Web.Navigate(Global.getSystemUrl(Global.HtmlPath + "NetworkError.html")); };
+            Web.Error += (sender, e) => { 
+                Web.Navigate(Global.getSystemUrl(Global.HtmlPath + "NetworkError.html")); 
+            };
             Web.DocumentTitleChanged += (sender, e) => { Text = Web.DocumentTitle; };
             Web.DocumentCompleted += (sender, e) =>
             {
@@ -74,7 +84,7 @@ namespace YesPos
 
 
 
-        public MyWebKitBrowser getWebBrowser()
+        public _WebKitBrowser getWebBrowser()
         {
             return Web;
         }
@@ -84,13 +94,27 @@ namespace YesPos
             return contextMenuStrip;
         }
 
+        public ContextMenuStrip getTrayContextMenuStrip()
+        {
+            return trayContextMenuStrip;
+        }
+
+        public NotifyIcon getNotifyIcon()
+        {
+            return mynotifyicon;
+        }
+        
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebViewForm));
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mynotifyicon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.trayContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip.SuspendLayout();
+            this.trayContextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // contextMenuStrip
@@ -107,6 +131,27 @@ namespace YesPos
             this.copyToolStripMenuItem.Text = "Copy";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
             // 
+            // mynotifyicon
+            // 
+            this.mynotifyicon.BalloonTipText = "We are Still Working";
+            this.mynotifyicon.Icon = ((System.Drawing.Icon)(resources.GetObject("mynotifyicon.Icon")));
+            this.mynotifyicon.Visible = true;
+            this.mynotifyicon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mynotifyicon_MouseClick);
+            // 
+            // trayContextMenuStrip
+            // 
+            this.trayContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exitToolStripMenuItem});
+            this.trayContextMenuStrip.Name = "trayContextMenuStrip";
+            this.trayContextMenuStrip.Size = new System.Drawing.Size(93, 26);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
             // WebViewForm
             // 
             this.ClientSize = new System.Drawing.Size(292, 270);
@@ -114,7 +159,9 @@ namespace YesPos
             this.Name = "WebViewForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Resize += new System.EventHandler(this.WebViewForm_Resize);
             this.contextMenuStrip.ResumeLayout(false);
+            this.trayContextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -123,9 +170,58 @@ namespace YesPos
         {
             try
             {
-                Clipboard.SetText(Web.SelectedText);
+                Dispatcher.Invoke(this, () => {
+                    Clipboard.SetText(Web.SelectedText);
+                });
             }
             finally { }
         }
+
+        private void WebViewForm_Resize(object sender, EventArgs e)
+        {
+            /*
+            if (FormWindowState.Minimized == this.WindowState)
+            {
+                toTray();
+            }
+            else
+            {
+                mynotifyicon.Visible = false;
+            }*/
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mynotifyicon.Visible = false;
+            this.Close();
+        }
+
+        private void mynotifyicon_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                fromTray();
+            }
+        }
+
+        public void fromTray()
+        {
+            mynotifyicon.Visible = false;
+            this.WindowState = FormWindowState.Maximized;
+            this.Show();
+            this.TopMost = true;
+            this.TopMost = false;
+        }
+
+        public void toTray()
+        {
+            mynotifyicon.Visible = true;
+            /*mynotifyicon.ContextMenuStrip = trayContextMenuStrip;
+            mynotifyicon.BalloonTipTitle = "YesPos still working";
+            mynotifyicon.BalloonTipText = "Some text going here....";
+            mynotifyicon.BalloonTipIcon = ToolTipIcon.Info;
+            mynotifyicon.ShowBalloonTip(1000);*/
+            this.Hide();
+        }        
     }
 }

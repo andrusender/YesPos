@@ -16,18 +16,16 @@ namespace YesPos
         {
             _Form = f;
         }
-        public void Refresh(string icon_path, string text,int text_size, Color color){
-            using (Bitmap bitmap = CreateBitmapImage(icon_path,text,text_size,color))
+        public void Refresh(Bitmap icon, string text,int text_size, Color color){
+            using (Bitmap bitmap = getBadgedBitmapImage(icon,text,text_size,color,""))
             {
                 IntPtr sourceIcon = bitmap.GetHicon();
                 _Form.Icon = Icon.FromHandle(sourceIcon);                
             }
         }
-        
-        private Bitmap CreateBitmapImage(string icon_file, string text,int text_size, Color color)
-        {
-            var file = Global.ImagePath+icon_file;
-            Bitmap objBmpImage = Bitmap.FromFile(file) as Bitmap;
+
+        public static Bitmap getBadgedBitmapImage(Bitmap objBmpImage, string text, int text_size, Color color, string position)
+        {            
             Font objFont = new Font("Arial",text_size, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
             Graphics objGraphics = Graphics.FromImage(objBmpImage);
             objGraphics = Graphics.FromImage(objBmpImage);
@@ -35,7 +33,26 @@ namespace YesPos
             objGraphics.TextRenderingHint = TextRenderingHint.AntiAlias;
             int intWidth = (int)objGraphics.MeasureString(text, objFont).Width;
             int intHeight = (int)objGraphics.MeasureString(text, objFont).Height;
-            objGraphics.DrawString(text, objFont, new SolidBrush(color), objBmpImage.Width - intWidth-0, 0);
+            int x=0, y=0;
+            switch (position)
+            {
+                case "topRight":
+                    x = objBmpImage.Width - intWidth;
+                    break;
+                case "bottomLeft":
+                    y = objBmpImage.Height - intHeight;
+                    break;
+                case "bottomRight":
+                    x = objBmpImage.Width - intWidth;
+                    y = objBmpImage.Height - intHeight;
+                    break;
+                case "center":
+                    x = objBmpImage.Width/2 - intWidth/2;
+                    y = objBmpImage.Height/2 - intHeight/2;
+                    break;
+            }
+            //objGraphics.DrawString(text, objFont, new SolidBrush(color), objBmpImage.Width - intWidth-0, 0);
+            objGraphics.DrawString(text, objFont, new SolidBrush(color), x,y);
             objGraphics.Flush();
             return (objBmpImage);
         }

@@ -65,7 +65,7 @@
     <TargetZone>Custom</TargetZone>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
@@ -125,14 +125,14 @@
     <Compile Include="YesPos\Dispatcher.cs" />
     <Compile Include="YesPos\DynamicIcon.cs" />
     <Compile Include="YesPos\Global.cs" />
-    <Compile Include="YesPos\JavaScript\JavaScriptBridge.cs" />
+    <Compile Include="YesPos\JavaScript\JavaScriptHandler.cs" />
     <Compile Include="YesPos\JavaScript\NotificationOptions.cs" />
     <Compile Include="YesPos\PrintOptions.cs" />
     <Compile Include="YesPos\WebViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="YesPos\Ini.cs" />
-    <Compile Include="YesPos\MyWebKitBrowser.cs">
+    <Compile Include="YesPos\Wrappers\_WebKitBrowser.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -162,43 +162,51 @@
     <None Include="System\Configuration.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="System\Webkit\CFLite.resources\CFCharacterSetBitmaps.bitmap" />
-    <None Include="System\Webkit\CFLite.resources\CFUniCharPropertyDatabase.data" />
-    <None Include="System\Webkit\CFLite.resources\CFUnicodeData-L.mapping" />
-    <None Include="System\Webkit\CFLite.resources\Info.plist" />
-    <None Include="System\Webkit\JavaScriptCore.resources\Info.plist" />
-    <None Include="System\Webkit\WebKit.resources\certificates\cacert.pem" />
-    <None Include="System\Webkit\WebKit.resources\Info.plist" />
+    <None Include="System\Engine\Webkit\CFLite.resources\CFCharacterSetBitmaps.bitmap" />
+    <None Include="System\Engine\Webkit\CFLite.resources\CFUniCharPropertyDatabase.data" />
+    <None Include="System\Engine\Webkit\CFLite.resources\CFUnicodeData-L.mapping" />
+    <None Include="System\Engine\Webkit\CFLite.resources\Info.plist" />
+    <None Include="System\Engine\Webkit\JavaScriptCore.resources\Info.plist" />
+    <None Include="System\Engine\Webkit\WebKit.resources\certificates\cacert.pem" />
+    <None Include="System\Engine\Webkit\WebKit.resources\Info.plist" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="System\Dll\" />
-    <Folder Include="System\Html\css\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="System\Engine\Webkit\WebKitBrowser.dll.config" />
+    <None Include="System\Engine\Webkit\WebKitBrowser.dll.manifest" />
     <None Include="System\Html\images\patterns_gray.png" />
-    <None Include="System\Html\images\logo_yes.png" />
+    <Content Include="System\Engine\Webkit\JSCore.dll" />
+    <Content Include="System\Engine\Webkit\WebKit.Interop.dll" />
+    <Content Include="System\Engine\Webkit\WebKitBrowser.dll" />
+    <Content Include="System\Engine\Webkit\WebKitCore.dll" />
+    <Content Include="System\Html\css\documentation.css" />
+    <Content Include="System\Html\Documentation.html" />
+    <Content Include="System\Html\images\1352334333_Recycle Bin Full.png" />
     <Content Include="System\Html\images\yespos.ico" />
+    <Content Include="System\Html\images\yespos_icon.png" />
+    <Content Include="System\Html\images\yespos_splash.png" />
+    <Content Include="System\Html\js\documentation.js" />
     <Content Include="System\Html\js\firebug-lite.js" />
     <Content Include="System\Html\NetworkError.html" />
-    <Content Include="System\Html\PrinterSettingsDialog.html" />
-    <Content Include="System\Html\SplashScreen.html" />
     <Content Include="System\Html\test.html" />
     <Content Include="System\Plugins\simple.js" />
-    <Content Include="System\Webkit\CFLite.dll" />
-    <Content Include="System\Webkit\icudt40.dll" />
-    <Content Include="System\Webkit\icuin40.dll" />
-    <Content Include="System\Webkit\icuuc40.dll" />
-    <Content Include="System\Webkit\JavaScriptCore.dll" />
-    <Content Include="System\Webkit\libcurl.dll" />
-    <Content Include="System\Webkit\libeay32.dll" />
-    <Content Include="System\Webkit\libexslt.dll" />
-    <Content Include="System\Webkit\libxml2.dll" />
-    <Content Include="System\Webkit\libxslt.dll" />
-    <Content Include="System\Webkit\objc.dll" />
-    <Content Include="System\Webkit\pthreadVC2.dll" />
-    <Content Include="System\Webkit\SQLite3.dll" />
-    <Content Include="System\Webkit\ssleay32.dll" />
-    <Content Include="System\Webkit\WebKit.dll" />
+    <Content Include="System\Engine\Webkit\CFLite.dll" />
+    <Content Include="System\Engine\Webkit\icudt40.dll" />
+    <Content Include="System\Engine\Webkit\icuin40.dll" />
+    <Content Include="System\Engine\Webkit\icuuc40.dll" />
+    <Content Include="System\Engine\Webkit\JavaScriptCore.dll" />
+    <Content Include="System\Engine\Webkit\libcurl.dll" />
+    <Content Include="System\Engine\Webkit\libeay32.dll" />
+    <Content Include="System\Engine\Webkit\libexslt.dll" />
+    <Content Include="System\Engine\Webkit\libxml2.dll" />
+    <Content Include="System\Engine\Webkit\libxslt.dll" />
+    <Content Include="System\Engine\Webkit\objc.dll" />
+    <Content Include="System\Engine\Webkit\pthreadVC2.dll" />
+    <Content Include="System\Engine\Webkit\SQLite3.dll" />
+    <Content Include="System\Engine\Webkit\ssleay32.dll" />
+    <Content Include="System\Engine\Webkit\WebKit.dll" />
     <Content Include="yespos.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -226,7 +234,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>xcopy "$(ProjectDir)\System\Webkit\*" "$(TargetDir)" /E /I /F /Y
+    <PreBuildEvent>xcopy "$(ProjectDir)\System\Engine\Webkit\*" "$(TargetDir)" /E /I /F /Y
 xcopy "$(ProjectDir)\System\Html\*" "$(TargetDir)\System\Html\" /E /I /F /Y
 xcopy "$(ProjectDir)\System\Plugins\*" "$(TargetDir)\System\Plugins\" /E /I /F /Y</PreBuildEvent>
   </PropertyGroup>

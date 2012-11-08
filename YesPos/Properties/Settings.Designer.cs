@@ -34,5 +34,17 @@ namespace YesPos.Properties {
                 this["printerOptions"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string storageObject {
+            get {
+                return ((string)(this["storageObject"]));
+            }
+            set {
+                this["storageObject"] = value;
+            }
+        }
     }
 }

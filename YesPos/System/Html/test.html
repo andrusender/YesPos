@@ -1,6 +1,13 @@
 ﻿<title>Hello World</title>
 <script>
 </script>
+<h1>Storage</h1>
+<code>
+    <pre>
+        <a>system.set_storage_object( json_string)</a>
+        <a>json_string system.get_storage_object()</a>
+    </pre>
+</code>
 <h1>Printing</h1>
 <code>
     <pre>   
@@ -152,16 +159,17 @@
 <h1>ContextMenu</h1>
 <code>
     <pre>
-        <a href="">string context_menu_add_item(string ids_path, string text, string image, string OnClick);</a><br />
-        <a href="">string context_menu_add_separator(string ids_path)</a><br />
-        <a href="">context_menu_remove_item(ids_path);</a>
+        type = ["system" or "tray"]
+        <a href="">string context_menu_add_item(string type, string ids_path, string text, string image, string OnClick);</a><br />
+        <a href="">string context_menu_add_separator(string type, string ids_path)</a><br />
+        <a href="">context_menu_remove_item(string type,ids_path);</a>
         <script>
             var id, id2, id3;
         </script>        
         <a href="javascript:id4=system.context_menu_add_separator('')">Add Separator</a>
-        <a href="javascript:id=system.context_menu_add_item('', 'Hello World', 'incoming.png', '')">Add Item</a>
-        <a href="javascript:id2=system.context_menu_add_item(id, 'Hello World Sub', 'incoming.png', '')">Add SubItem</a>
-        <a href="javascript:id3=system.context_menu_add_item(id2, 'Hello World Sub Sub', 'incoming.png', 'alert(\'Clicked\')')">Add SubSubItem</a>
+        <a href="javascript:id=system.context_menu_add_item('tray','', 'Hello World', '', '')">Add Item</a>
+        <a href="javascript:id2=system.context_menu_add_item(id, 'Hello World Sub', '', '')">Add SubItem</a>
+        <a href="javascript:id3=system.context_menu_add_item(id2, 'Hello World Sub Sub', '', 'alert(\'Clicked\')')">Add SubSubItem</a>
 
         <a href="javascript:system.context_menu_remove_item(id)">Delete Item</a>
         <a href="javascript:system.context_menu_remove_item(id2)">Delete SubItem</a>

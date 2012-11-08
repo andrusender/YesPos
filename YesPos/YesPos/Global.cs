@@ -12,6 +12,7 @@ namespace YesPos
         public static string ImagePath = Global.AppDir + @"\System\Html\images\";
         public static string JsPath = Global.AppDir + @"\System\Html\js\";
         public static string PluginsPath = Global.AppDir + @"\System\Plugins\";
+        public static string CookiesFile = Global.AppDir + @"\System\cookies.jar";
         
         public static string getSystemUrl(string path)
         {
