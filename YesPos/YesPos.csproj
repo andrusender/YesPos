@@ -191,7 +191,7 @@
     <Content Include="System\Html\js\firebug-lite.js" />
     <Content Include="System\Html\NetworkError.html" />
     <Content Include="System\Html\test.html" />
-    <Content Include="System\Plugins\simple.js" />
+    <Content Include="System\Plugins\print_test.js" />
     <Content Include="System\Engine\Webkit\CFLite.dll" />
     <Content Include="System\Engine\Webkit\icudt40.dll" />
     <Content Include="System\Engine\Webkit\icuin40.dll" />
@@ -207,6 +207,7 @@
     <Content Include="System\Engine\Webkit\SQLite3.dll" />
     <Content Include="System\Engine\Webkit\ssleay32.dll" />
     <Content Include="System\Engine\Webkit\WebKit.dll" />
+    <Content Include="System\Plugins\toolbar.js" />
     <Content Include="yespos.ico" />
   </ItemGroup>
   <ItemGroup>

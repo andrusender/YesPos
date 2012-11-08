@@ -1,9 +1,12 @@
 ﻿body
 {
 	font-family:Arial;
+	
+
 }
 .refresh
 {
+	display:none;
 	position:fixed;
 	top:0px;
 	right:0px;
@@ -12,11 +15,12 @@
 	font-weight:bold;
 	background:yellow;
 	color:black;
-	display:block;
 }
 .group
 {
-	margin-bottom:50px;
+	padding-bottom:30px;
+	margin-bottom:30px;
+	border-bottom:dashed 2px gray;
 }
 .group h1
 {
@@ -31,43 +35,52 @@
 }
 .group ul li
 {
-	margin:10px;
+	margin:30px 0px;
+	position:relative;
+	display:block;
 }
 .group ul b
 {
+	font-family:Courier New;
 	font-weight:bold;
-	font-family:Tahoma;
-	line-height:150%;
-	font-size:12px;
+	color:black;
+	font-size:15px;
 	display:block;	
-	background:lightgray;
+	background:#e3e0d0;
 	display:inline-block;
 	padding:10px;
 	border:solid 1px gray;
-	border-bottom-width:0px;
+	border-bottom:dotted 1px gray;
 	position:relative;
 	margin-bottom:-1px;
+
 }
 .group ul li span
 {
 	font-size:11px;
 	display:inline-block;
+	font-style:italic;
+	background:white;
 	border:solid 1px gray;
+	color:black;
 	border-bottom-width:0px;
 	padding:10px;	
 	margin-left:-5px;
-	white-space:pre-line;
+	white-space:pre-line;	
 }
 .group ul li a
 {
+
 	display:inline-block;
-	color:Blue;
+	color:black;
 	font-size:12px;
 }
 .group ul code
 {
+	font-family:Courier New;
+	font-size:11px;
 	display:block;
-	background:lightgray;
+	background:#e3e0d0;
 	white-space:pre-line;
 	border:solid 1px gray;
 	padding:5px 10px 20px 10px;

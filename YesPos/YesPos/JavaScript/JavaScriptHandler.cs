@@ -318,6 +318,11 @@ namespace YesPos
         public void print_html(string html, string options)
         {
             if (String.IsNullOrEmpty(options)) options = get_default_print_options();
+            /*var tempPath = System.IO.Path.GetTempPath();
+            var uniq = DateTime.Now.Ticks;
+            var tempFile = tempPath + "\\__yes_pos_print_" + uniq + ".html";
+            System.IO.File.WriteAllText(tempFile, html);
+            print_url(Global.getSystemUrl(tempFile), options);*/
             var webTemp = new _WebKitBrowser();
             F.Controls.Add(webTemp);
             webTemp.DocumentText = html;

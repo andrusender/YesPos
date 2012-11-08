@@ -22,8 +22,7 @@ namespace YesPos
             : base()
         {            
             InitializeComponent();
-            this.MinimumSize = new Size(int.Parse(Config.get("system", "minWidth")), int.Parse(Config.get("system", "minHeight")));
-            
+            this.MinimumSize = new Size(int.Parse(Config.get("system", "minWidth")), int.Parse(Config.get("system", "minHeight")));            
             splashPanel= new Panel();
             splashPanel.BackColor = Color.White;
             splashPanel.BackgroundImage = Bitmap.FromFile(Config.get("system","splashImage"));
@@ -40,6 +39,8 @@ namespace YesPos
                 t.Stop();
             };
             this.FormClosed += (sender, e) => { mynotifyicon.Visible = false; };
+            mynotifyicon.Visible = false;
+            mynotifyicon.ContextMenuStrip = trayContextMenuStrip;
         }
         
         private void InitializeWebBrowser(string start_url)
@@ -216,8 +217,7 @@ namespace YesPos
         public void toTray()
         {
             mynotifyicon.Visible = true;
-            /*mynotifyicon.ContextMenuStrip = trayContextMenuStrip;
-            mynotifyicon.BalloonTipTitle = "YesPos still working";
+            /*mynotifyicon.BalloonTipTitle = "YesPos still working";
             mynotifyicon.BalloonTipText = "Some text going here....";
             mynotifyicon.BalloonTipIcon = ToolTipIcon.Info;
             mynotifyicon.ShowBalloonTip(1000);*/

@@ -12,7 +12,7 @@
         <ul>
             <li>
                 <b>set_storage_object(string obj)</b>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);alert('Done')">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);alert('Done')">sample</a>
                 <code>               
                     window.external.set_storage_object(JSON.stringify({
                         MyValue: "Value"
@@ -21,7 +21,7 @@
             </li>
             <li>
                 <b>string get_storage_object()</b>                    
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);alert(jsonAsString);">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);alert(jsonAsString);">sample</a>
                 <code>               
                     var jsonAsString = window.external.get_storage_object();
                     var local = JSON.parse(jsonAsString); 
@@ -35,7 +35,7 @@
             <li>
                 <b>on_window_minimazed_event(string js)</b>
                 <span>Call when user will minimazed form</span>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);alert('Now try minimize Form')">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);alert('Now try minimize Form')">sample</a>
                 <code>
                     var js = 'window.external.hide_window_to_tray();';
                         js+='window.external.show_tray_baloon("BaloonTitle", "Hello world", "info", "1000", "alert(\'BaloonClicked!\')")';
@@ -45,14 +45,14 @@
             <li>
                 <b>on_window_close_event(string js)</b>
                 <span>Call when user will close form</span>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);alert('Now try close Form')">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);alert('Now try close Form')">sample</a>
                 <code>
                     window.external.on_window_close_event("alert('Here u can do some actions.Like save SOME DATA')");
                 </code>
             </li>
             <li>
                 <b>set_window_minimum_size(string w, string h)</b>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);alert('Done! Now Try Change Form Size')">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);alert('Done! Now Try Change Form Size')">sample</a>
                 <code>
                     window.external.set_window_minimum_size("500", "500");
                 </code>
@@ -60,21 +60,21 @@
             <li>
                 <b>show_window_from_tray()</b>
                 <span>If Form will hiden to tray you always can show it from js</span>
-                <a href="javascript:void(0)" onclick="setTimeout(this.next().innerHTML,5000);">Press Link & roll form. It will displayed in 5 sec</a>
+                <a href="javascript:void(0)" onclick="setTimeout(getNext(this).innerHTML,5000);">Press Link & roll form. It will displayed in 5 sec</a>
                 <code>
                     window.external.show_window_from_tray();
                 </code>
             </li>
             <li>
                 <b>hide_window_to_tray()</b>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);">sample</a>
                 <code>
                     window.external.hide_window_to_tray();
                 </code>
             </li>
             <li>
                 <b>set_icon(string icon_path)</b>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);">sample</a>
                 <code>
                     window.external.set_icon("1352334333_Recycle Bin Full.png")
                 </code>
@@ -84,7 +84,7 @@
                 <span>color: hex format like (#ffffff);
                     position: topLeft,bottomLeft,topRight,bottomRight,center
                 </span>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);">sample</a>
                 <code>
                     window.external.set_badge_text("1", "19", "#ffffff", "bottomRight")
                 </code>
@@ -92,7 +92,7 @@
             <li>
                 <b>set_tray_icon(string icon_path)</b>
                 <span>Change icon when Form are displayed in tray</span>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);">sample</a>
                 <code>
                     window.external.set_tray_icon("1352334333_Recycle Bin Full.png");
                 </code>
@@ -100,7 +100,7 @@
             <li>
                 <b>show_tray_baloon(string title, string text, string icon_type, string delay, string onClick)</b>
                 <span>icon_type: none, error, info, warning</span>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);">sample</a>
                 <code>
                     window.external.show_tray_baloon("BaloonTitle", "Hello world", "info", "1000", "alert('BaloonClicked!')")
                 </code>
@@ -108,7 +108,7 @@
             <li>
                 <b>set_tray_icon_visible(string v)</b>
                 <span>Display or No in tray, true|false</span>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);">sample</a>
                 <code>
                     window.external.set_tray_icon_visible("true");
                 </code>
@@ -121,7 +121,7 @@
         <ul>
             <li>
                 <b>string[] get_system_printers()</b>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);alert(sys_printers);">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);alert(sys_printers);">sample</a>
                 <code>
                     var sys_printers = window.external.get_system_printers();
                 </code>
@@ -129,7 +129,7 @@
             <li>
                 <b>string get_paper_sizes()</b>
                 <span>Return All Available In System Paper Sizes</span>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);alert(jsonAsString)">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);alert(jsonAsString)">sample</a>
                 <code>
                    var jsonAsString = window.external.get_paper_sizes();
                    var obj = JSON.parse(jsonAsString);
@@ -138,7 +138,7 @@
             <li>
                 <b>string get_default_print_options()</b>
                 <span>Get Default Printer Options from Application Storage</span>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);alert(defaultOptionsString)">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);alert(defaultOptionsString)">sample</a>
                 <code>
                     var defaultOptionsString =  window.external.get_default_print_options();
                     var defaultOptions = JSON.parse(defaultOptionsString);
@@ -147,7 +147,7 @@
             <li>
                 <b>set_default_print_options(string options)</b>
                 <span>Apply Once Printer Options & u can do Printing without everyTime transmission this</span>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);alert('Done')">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);alert('Done')">sample</a>
                 <code>
                     //ALL SIZES IN Milimeters(mm)
                     var printers = window.external.get_system_printers();
@@ -168,7 +168,7 @@
             <li>
                 <b>print(string options)</b>
                 <span>Print Current Page</span>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);">sample</a>
                 <code>                    
                     /*
                         var options = JSON.stringify({
@@ -184,7 +184,7 @@
             <li>
                 <b>print_url(string url, string options)</b>
                 <span>System Print URL</span>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);">sample</a>
                 <code>
                     window.external.print_url("http://google.com", "");
                 </code>
@@ -195,9 +195,9 @@
                 System Print Part Of HTML
                     <textarea style="width:500px;height:40px;" id="pHtml"><center><b>HELLO I AM PART OF HTML</b></center></textarea>
                 </span>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);">sample</a>
                 <code>
-                    window.external.print_html(document.getElementById("pHtml").innerHTML,"");
+                    window.external.print_html(document.getElementById("pHtml").value,"");
                 </code>
             </li>
         </ul>
@@ -207,14 +207,14 @@
         <ul>
             <li>
                 <b>set_clipboard_text(string text)</b>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);alert('Done')">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);alert('Done')">sample</a>
                 <code>
                     window.external.set_clipboard_text("YESPOS.CLIPBOARD");
                 </code>
             </li>
             <li>
                 <b> string get_clipboard_text()</b>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);alert(data)">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);alert(data)">sample</a>
                 <code>
                      var data = window.external.get_clipboard_text();
                 </code>
@@ -226,7 +226,7 @@
         <ul>
             <li>
                 <b>show_notification(string options_json_string)</b>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);">sample</a>
                 <code>
                     var options = {
                         Title: "My Title",
@@ -283,7 +283,7 @@
                 <span>Context Menu called when user click right 
                     button on mouse on type(form || tray)
                 </span>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);alert('Now click right button on mouse')">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);alert('Now click right button on mouse')">sample</a>
                 <code>
                     var type = "form";
                     var path = window.external.context_menu_add_item(type, "/", "Hi Press Me", "1352334333_Recycle Bin Full.png", "")
@@ -300,7 +300,7 @@
             </li>
             <li>
                 <b>context_menu_remove_item(string type, string ids_path_string)</b>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);alert('Now click right button on mouse')">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);alert('Now click right button on mouse')">sample</a>
                 <code>
                     window.external.context_menu_remove_item("form", "/1");                    
 
@@ -311,7 +311,7 @@
             </li>
             <li>
                 <b>string context_menu_add_separator(string type, string ids_path_string)</b>
-                <a href="javascript:void(0)" onclick="eval(this.next().innerHTML);alert('Now click right button on mouse')">sample</a>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);alert('Now click right button on mouse')">sample</a>
                 <code>
                     window.external.context_menu_add_separator("form", "/");                
                 </code>
