@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO.Compression;
 using WebKit.Interop;
+using System.Diagnostics;
 namespace YesPos
 {
     class _WebKitBrowser:WebKitBrowser
@@ -26,7 +27,11 @@ namespace YesPos
             jsObjectName = name;
             ObjectForScripting = obj;
         }
-
+        private bool allowCookies = false;
+        public bool AllowCookies { 
+            get { return allowCookies; } 
+            set{ allowCookies = value; } 
+        }
         public bool AllowPlugins { 
             get { return allowPlugins; }
             set { allowPlugins = value; }
@@ -41,7 +46,7 @@ namespace YesPos
             };            
             this.ShowJavaScriptAlertPanel += (sender, e) => { MessageBox.Show(this.ParentForm,e.Message, this.DocumentTitle, MessageBoxButtons.OK, MessageBoxIcon.Exclamation); };
             this.ShowJavaScriptConfirmPanel += (sender, e) => { e.ReturnValue = (DialogResult.Yes == MessageBox.Show(this.ParentForm,e.Message, this.DocumentTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Question)); };
-            this.ShowJavaScriptPromptPanel += (sender, e) => { e.ReturnValue = Microsoft.VisualBasic.Interaction.InputBox(e.Message, this.DocumentTitle, e.DefaultValue); };
+            this.ShowJavaScriptPromptPanel += (sender, e) => { e.ReturnValue = Microsoft.VisualBasic.Interaction.InputBox(e.Message, this.DocumentTitle, e.DefaultValue,0,0); };
             this.DocumentCompleted += (sender, e) => {
                 if (allowFireBug)
                 {
@@ -113,6 +118,18 @@ namespace YesPos
                 return new CookieContainer();
             }
         }
+
+        /*
+        public void Navigate(string url)
+        {
+            //base.Navigate(url);
+            //return;
+            allowCookies = true;
+
+            //var c = new WebCacheModel();
+            //p.ca
+            base.Navigate(url);
+        }*/
 
         public struct FireBugOptionsStruct{
             public bool overrideConsole;

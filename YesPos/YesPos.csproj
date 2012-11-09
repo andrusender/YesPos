@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{B4AD3D84-CBB4-49AC-B58E-B8CB36A5FDF1}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -26,7 +26,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ProductName>YesPos</ProductName>
     <PublisherName>eat24hours.com</PublisherName>
-    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationRevision>4</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -59,16 +59,16 @@
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
-    <StartupObject>YesPos.Program</StartupObject>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>Custom</TargetZone>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>false</GenerateManifests>
+    <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>63E8ADE49506291BEC63E97B34C5DD38039C2B1A</ManifestCertificateThumbprint>
@@ -90,6 +90,14 @@
     <DelaySign>true</DelaySign>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CefSharp, Version=0.12.4596.50, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>System\Engine\CEF\CefSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="CefSharp.WinForms, Version=0.12.4596.53, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>System\Engine\CEF\CefSharp.WinForms.dll</HintPath>
+    </Reference>
     <Reference Include="INIFileParser, Version=1.7.1.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>System\Dll\INIFileParser.dll</HintPath>
@@ -132,6 +140,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="YesPos\Ini.cs" />
+    <Compile Include="YesPos\Wrappers\_CefBrowser.cs" />
     <Compile Include="YesPos\Wrappers\_WebKitBrowser.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -162,6 +171,61 @@
     <None Include="System\Configuration.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="System\Engine\CEF\chrome.pak" />
+    <None Include="System\Engine\CEF\debug.log" />
+    <None Include="System\Engine\CEF\locales\am.pak" />
+    <None Include="System\Engine\CEF\locales\ar.pak" />
+    <None Include="System\Engine\CEF\locales\bg.pak" />
+    <None Include="System\Engine\CEF\locales\bn.pak" />
+    <None Include="System\Engine\CEF\locales\ca.pak" />
+    <None Include="System\Engine\CEF\locales\cs.pak" />
+    <None Include="System\Engine\CEF\locales\da.pak" />
+    <None Include="System\Engine\CEF\locales\de.pak" />
+    <None Include="System\Engine\CEF\locales\el.pak" />
+    <None Include="System\Engine\CEF\locales\en-GB.pak" />
+    <None Include="System\Engine\CEF\locales\en-US.pak" />
+    <None Include="System\Engine\CEF\locales\es-419.pak" />
+    <None Include="System\Engine\CEF\locales\es.pak" />
+    <None Include="System\Engine\CEF\locales\et.pak" />
+    <None Include="System\Engine\CEF\locales\fa.pak" />
+    <None Include="System\Engine\CEF\locales\fi.pak" />
+    <None Include="System\Engine\CEF\locales\fil.pak" />
+    <None Include="System\Engine\CEF\locales\fr.pak" />
+    <None Include="System\Engine\CEF\locales\gu.pak" />
+    <None Include="System\Engine\CEF\locales\he.pak" />
+    <None Include="System\Engine\CEF\locales\hi.pak" />
+    <None Include="System\Engine\CEF\locales\hr.pak" />
+    <None Include="System\Engine\CEF\locales\hu.pak" />
+    <None Include="System\Engine\CEF\locales\id.pak" />
+    <None Include="System\Engine\CEF\locales\it.pak" />
+    <None Include="System\Engine\CEF\locales\ja.pak" />
+    <None Include="System\Engine\CEF\locales\kn.pak" />
+    <None Include="System\Engine\CEF\locales\ko.pak" />
+    <None Include="System\Engine\CEF\locales\lt.pak" />
+    <None Include="System\Engine\CEF\locales\lv.pak" />
+    <None Include="System\Engine\CEF\locales\ml.pak" />
+    <None Include="System\Engine\CEF\locales\mr.pak" />
+    <None Include="System\Engine\CEF\locales\ms.pak" />
+    <None Include="System\Engine\CEF\locales\nb.pak" />
+    <None Include="System\Engine\CEF\locales\nl.pak" />
+    <None Include="System\Engine\CEF\locales\pl.pak" />
+    <None Include="System\Engine\CEF\locales\pt-BR.pak" />
+    <None Include="System\Engine\CEF\locales\pt-PT.pak" />
+    <None Include="System\Engine\CEF\locales\ro.pak" />
+    <None Include="System\Engine\CEF\locales\ru.pak" />
+    <None Include="System\Engine\CEF\locales\sk.pak" />
+    <None Include="System\Engine\CEF\locales\sl.pak" />
+    <None Include="System\Engine\CEF\locales\sr.pak" />
+    <None Include="System\Engine\CEF\locales\sv.pak" />
+    <None Include="System\Engine\CEF\locales\sw.pak" />
+    <None Include="System\Engine\CEF\locales\ta.pak" />
+    <None Include="System\Engine\CEF\locales\te.pak" />
+    <None Include="System\Engine\CEF\locales\th.pak" />
+    <None Include="System\Engine\CEF\locales\tr.pak" />
+    <None Include="System\Engine\CEF\locales\uk.pak" />
+    <None Include="System\Engine\CEF\locales\vi.pak" />
+    <None Include="System\Engine\CEF\locales\zh-CN.pak" />
+    <None Include="System\Engine\CEF\locales\zh-TW.pak" />
     <None Include="System\Engine\Webkit\CFLite.resources\CFCharacterSetBitmaps.bitmap" />
     <None Include="System\Engine\Webkit\CFLite.resources\CFUniCharPropertyDatabase.data" />
     <None Include="System\Engine\Webkit\CFLite.resources\CFUnicodeData-L.mapping" />
@@ -171,12 +235,19 @@
     <None Include="System\Engine\Webkit\WebKit.resources\Info.plist" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="System\Dll\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="System\Engine\Webkit\WebKitBrowser.dll.config" />
-    <None Include="System\Engine\Webkit\WebKitBrowser.dll.manifest" />
     <None Include="System\Html\images\patterns_gray.png" />
+    <Content Include="System\Engine\CEF\avcodec-54.dll" />
+    <Content Include="System\Engine\CEF\avformat-54.dll" />
+    <Content Include="System\Engine\CEF\avutil-51.dll" />
+    <Content Include="System\Engine\CEF\CefSharp.dll" />
+    <Content Include="System\Engine\CEF\CefSharp.Example.dll" />
+    <Content Include="System\Engine\CEF\CefSharp.WinForms.dll" />
+    <Content Include="System\Engine\CEF\CefSharp.Wpf.dll" />
+    <Content Include="System\Engine\CEF\icudt.dll" />
+    <Content Include="System\Engine\CEF\libcef.dll" />
+    <Content Include="System\Engine\CEF\libEGL.dll" />
+    <Content Include="System\Engine\CEF\libGLESv2.dll" />
     <Content Include="System\Engine\Webkit\JSCore.dll" />
     <Content Include="System\Engine\Webkit\WebKit.Interop.dll" />
     <Content Include="System\Engine\Webkit\WebKitBrowser.dll" />
@@ -219,7 +290,22 @@
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <ProductName>.NET Framework Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
@@ -233,9 +319,15 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="System\Dll\" />
+    <Folder Include="System\Engine\CEF\cache\" />
+    <Folder Include="System\Engine\CEF\cookies\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>xcopy "$(ProjectDir)\System\Engine\Webkit\*" "$(TargetDir)" /E /I /F /Y
+xcopy "$(ProjectDir)\System\Engine\CEF\*" "$(TargetDir)" /E /I /F /Y
 xcopy "$(ProjectDir)\System\Html\*" "$(TargetDir)\System\Html\" /E /I /F /Y
 xcopy "$(ProjectDir)\System\Plugins\*" "$(TargetDir)\System\Plugins\" /E /I /F /Y</PreBuildEvent>
   </PropertyGroup>

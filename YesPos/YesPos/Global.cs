@@ -17,7 +17,7 @@ namespace YesPos
         public static string getSystemUrl(string path)
         {
             //var path = Global.HtmlPath + htmlFile+".html";
-            string url = new Uri(path, UriKind.Absolute).AbsoluteUri;
+            string url = new Uri(path.Replace(@"\","/"), UriKind.Absolute).AbsoluteUri;
             return url;
         }
     }

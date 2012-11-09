@@ -51,7 +51,7 @@ namespace YesPos
                 }
                 else
                 {
-                    F.getWebBrowser().StringByEvaluatingJavaScriptFromString("alert('Error!\\nImage not Found!\\n" + (Global.ImagePath + addr).Replace("\\", "/") + "');");
+                    //F.getWebBrowser().StringByEvaluatingJavaScriptFromString("alert('Error!\\nImage not Found!\\n" + (Global.ImagePath + addr).Replace("\\", "/") + "');");
                 }
             }
             return result;
@@ -63,10 +63,13 @@ namespace YesPos
         #endregion
 
         #region System
+        public void dom_ready()
+        {
+            F.getWebBrowser().call_dom_ready_event();
+        }
         public void refresh()
         {
-            var b = F.getWebBrowser();
-            b.Navigate(b.Url.OriginalString);
+            F.getWebBrowser().getWebView().Refresh();
         }
         public void error(string title, string text)
         {
@@ -114,28 +117,54 @@ namespace YesPos
         }
         #endregion
 
+        #region DevTools
+        public void show_developer_tool()
+        {
+            Dispatcher.Invoke(F, () =>
+            {
+                F.getWebBrowser().getWebView().ShowDevTools();
+            });
+        }
+        public void hide_developer_tool()
+        {
+            Dispatcher.Invoke(F, () =>
+            {
+                F.getWebBrowser().getWebView().CloseDevTools();
+            });
+        }
+        #endregion
         #region Form
         public void on_window_minimized_event(string js)
         {
             EventHandler eh = null;
-            eh = (sender, e) => {
+            eh = (sender, e) =>
+            {
                 if (FormWindowState.Minimized == F.WindowState)
                 {
                     F.getWebBrowser().StringByEvaluatingJavaScriptFromString(escapeJs(js));
                 }
                 //F.Resize -= eh;
             };
-            F.Resize += eh;
+            Dispatcher.Invoke(F, () =>
+            {
+                F.Resize += eh;
+            });
         }
         public void on_window_close_event(string js)
         {
-            F.FormClosing += (sender, e) => { F.getWebBrowser().StringByEvaluatingJavaScriptFromString(escapeJs(js)); };
+            Dispatcher.Invoke(F, () =>
+            {
+                F.FormClosing += (sender, e) => { F.getWebBrowser().StringByEvaluatingJavaScriptFromString(escapeJs(js)); };
+            });
         }
         public void set_window_minimum_size(string w, string h)
         {
             try
             {
-                F.MinimumSize = new Size(int.Parse(w), int.Parse(h));
+                Dispatcher.Invoke(F, () =>
+                {
+                    F.MinimumSize = new Size(int.Parse(w), int.Parse(h));
+                });
             }
             catch (Exception e)
             {
@@ -144,35 +173,51 @@ namespace YesPos
         }
         public void show_window_from_tray()
         {
-            F.fromTray();
+            Dispatcher.Invoke(F, () =>
+            {
+                F.fromTray();
+            });
         }
         public void hide_window_to_tray()
         {
-            F.toTray();
+            Dispatcher.Invoke(F, () =>
+            {
+                F.toTray();
+            });
         }
         public void set_icon(string icon_path)
         {
             var icon_bitmap = getImageByAddress(icon_path) as Bitmap;
             IntPtr icon_handler = icon_bitmap.GetHicon();
-            F.Icon = tempFicon = Icon.FromHandle(icon_handler);
+            Dispatcher.Invoke(F, () =>
+            {
+                F.Icon = tempFicon = Icon.FromHandle(icon_handler);
+            });
         }
         public void set_badge_text(string text, string font_size, string color, string position)
         {
             if (tempFicon == null) tempFicon = F.Icon;
             int _font_size = 19;
             int.TryParse(font_size, out _font_size);
-            Bitmap badgetBitmap = DynamicIcon.getBadgedBitmapImage(tempFicon.ToBitmap(), text, _font_size, System.Drawing.ColorTranslator.FromHtml(color),position);
+            Bitmap badgetBitmap = DynamicIcon.getBadgedBitmapImage(tempFicon.ToBitmap(), text, _font_size, System.Drawing.ColorTranslator.FromHtml(color), position);
             IntPtr iconHandler = badgetBitmap.GetHicon();
-            F.Icon = Icon.FromHandle(iconHandler);
+            Dispatcher.Invoke(F, () =>
+            {
+                F.Icon = Icon.FromHandle(iconHandler);
+            });
         }
         public void set_tray_icon(string icon_path)
         {
-            var notify_icon = F.getNotifyIcon();
-            var icon_handler = ((Bitmap)getImageByAddress(icon_path)).GetHicon();
-            notify_icon.Icon = Icon.FromHandle(icon_handler);
+            Dispatcher.Invoke(F, () =>
+                {
+                    var notify_icon = F.getNotifyIcon();
+                    var icon_handler = ((Bitmap)getImageByAddress(icon_path)).GetHicon();
+                    notify_icon.Icon = Icon.FromHandle(icon_handler);
+                });
         }
         public void show_tray_baloon(string title, string text, string icon_type, string delay, string onClick)
         {
+
             ToolTipIcon icon;
             switch (icon_type)
             {
@@ -190,27 +235,33 @@ namespace YesPos
                     break;
             }
             var web = F.getWebBrowser();
-            var notify_icon = F.getNotifyIcon();
-            EventHandler eh = null;
-            eh = (s, e) =>
+            Dispatcher.Invoke(F, () =>
             {
-                web.StringByEvaluatingJavaScriptFromString(escapeJs(onClick));
-                notify_icon.BalloonTipClicked -= eh;
-            };
-            notify_icon.BalloonTipClicked += eh;
-            notify_icon.BalloonTipText = text;
-            notify_icon.BalloonTipIcon = icon;
-            notify_icon.BalloonTipTitle = title;
-            notify_icon.Visible = true;
-            int _delay = 1000;
-            int.TryParse(delay, out _delay);
-            notify_icon.ShowBalloonTip(_delay);
+                var notify_icon = F.getNotifyIcon();
+                EventHandler eh = null;
+                eh = (s, e) =>
+                {
+                    web.StringByEvaluatingJavaScriptFromString(escapeJs(onClick));
+                    notify_icon.BalloonTipClicked -= eh;
+                };
+                notify_icon.BalloonTipClicked += eh;
+                notify_icon.BalloonTipText = text;
+                notify_icon.BalloonTipIcon = icon;
+                notify_icon.BalloonTipTitle = title;
+                notify_icon.Visible = true;
+                int _delay = 1000;
+                int.TryParse(delay, out _delay);
+                notify_icon.ShowBalloonTip(_delay);
+            });
         }
         public void set_tray_icon_visible(string v)
         {
-            bool _v = false;
-            bool.TryParse(v, out _v);
-            F.getNotifyIcon().Visible = _v;
+            Dispatcher.Invoke(F, () =>
+            {
+                bool _v = false;
+                bool.TryParse(v, out _v);
+                F.getNotifyIcon().Visible = _v;
+            });
         }
         #endregion;
 
@@ -271,7 +322,7 @@ namespace YesPos
             }
             catch (Exception e)
             {
-                F.getWebBrowser().StringByEvaluatingJavaScriptFromString("alert('Incorrect PrintOptions!')");
+                F.getWebBrowser().StringByEvaluatingJavaScriptFromString("window.external.error('Incorrect PrintOptions!')");
             }
 
             return;
@@ -294,44 +345,47 @@ namespace YesPos
 
         public void print(string options)
         {
+
             if (String.IsNullOrEmpty(options)) options = get_default_print_options();
-            var web = F.getWebBrowser();
-            applyPrintOptionsFromString(options, ref web);
-            web.Print();
+            string html = F.getWebBrowser().getWebView().EvaluateScript("document.documentElement.innerHTML").ToString();
+            print_html(html, options);
+            Dispatcher.Invoke(F, () =>
+            { });
         }
 
         public void print_url(string url, string options)
         {
-            if (String.IsNullOrEmpty(options)) options = get_default_print_options();
-            var webTemp = new _WebKitBrowser();
-            F.Controls.Add(webTemp);
-            webTemp.Navigate(url);
-            webTemp.DocumentCompleted += (sender, e) =>
+            Dispatcher.Invoke(F, () =>
             {
-                applyPrintOptionsFromString(options, ref webTemp);
-                webTemp.Print();
-                F.Controls.Remove(webTemp);
-            };
-            webTemp.Error += (sender, e) => { F.Controls.Remove(webTemp); };
+                if (String.IsNullOrEmpty(options)) options = get_default_print_options();
+                var webTemp = new _WebKitBrowser();
+                F.Controls.Add(webTemp);
+                webTemp.Navigate(url);
+                webTemp.DocumentCompleted += (sender, e) =>
+                {
+                    applyPrintOptionsFromString(options, ref webTemp);
+                    webTemp.Print();
+                    F.Controls.Remove(webTemp);
+                };
+                webTemp.Error += (sender, e) => { F.Controls.Remove(webTemp); };
+            });
         }
 
         public void print_html(string html, string options)
         {
-            if (String.IsNullOrEmpty(options)) options = get_default_print_options();
-            /*var tempPath = System.IO.Path.GetTempPath();
-            var uniq = DateTime.Now.Ticks;
-            var tempFile = tempPath + "\\__yes_pos_print_" + uniq + ".html";
-            System.IO.File.WriteAllText(tempFile, html);
-            print_url(Global.getSystemUrl(tempFile), options);*/
-            var webTemp = new _WebKitBrowser();
-            F.Controls.Add(webTemp);
-            webTemp.DocumentText = html;
-            webTemp.DocumentCompleted += (sender, e) =>
+            Dispatcher.Invoke(F, () =>
             {
-                applyPrintOptionsFromString(options, ref webTemp);
-                webTemp.Print();
-                F.Controls.Remove(webTemp);
-            };
+                if (String.IsNullOrEmpty(options)) options = get_default_print_options();
+                var webTemp = new _WebKitBrowser();
+                F.Controls.Add(webTemp);
+                webTemp.DocumentText = html;
+                webTemp.DocumentCompleted += (sender, e) =>
+                {
+                    applyPrintOptionsFromString(options, ref webTemp);
+                    webTemp.Print();
+                    F.Controls.Remove(webTemp);
+                };
+            });
         }
         #endregion;
 
@@ -420,11 +474,11 @@ namespace YesPos
         public string context_menu_add_item(string type, string ids_path_string, string text, string image, string OnClick)
         {
             string result = "";
-            if(ids_path_string!=null && ids_path_string.StartsWith("/"))
+            if (ids_path_string != null && ids_path_string.StartsWith("/"))
             {
                 ids_path_string = ids_path_string.Substring(1);
             }
-            var ids_path = (String.IsNullOrEmpty(ids_path_string))? null : ids_path_string.Split('/');
+            var ids_path = (String.IsNullOrEmpty(ids_path_string)) ? null : ids_path_string.Split('/');
             var menu = (type == "tray") ? F.getTrayContextMenuStrip() : F.getContextMenuStrip();
             ToolStripItem new_item = null;
             if (String.IsNullOrEmpty(text) && String.IsNullOrEmpty(image) && String.IsNullOrEmpty(OnClick))
@@ -459,7 +513,7 @@ namespace YesPos
             }
             catch (Exception e)
             {
-                error("context_menu_add_item", "Ivalid Arguments\n context_menu_add_item('"+type+"', '"+ids_path_string+"', '"+text+"', '"+image+"', '"+OnClick+"')");
+                error("context_menu_add_item", "Ivalid Arguments\n context_menu_add_item('" + type + "', '" + ids_path_string + "', '" + text + "', '" + image + "', '" + OnClick + "')");
             }
             return result;
         }

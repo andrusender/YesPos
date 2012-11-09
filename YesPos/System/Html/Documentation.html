@@ -8,6 +8,25 @@
 	<body>
     <a href="javascript:void(0)" class="refresh" onclick="window.external.refresh()">Refresh</a>
 	<div class="group">
+        <h1>Developer tools</h1>
+        <ul>
+            <li>
+                <b>show_developer_tool()</b>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);">sample</a>
+                <code>               
+                    window.external.show_developer_tool()
+                </code>                 
+            </li>
+            <li>
+                <b>hide_developer_tool()</b>
+                <a href="javascript:void(0)" onclick="eval(getNext(this).innerHTML);">sample</a>
+                <code>               
+                    window.external.hide_developer_tool();
+                </code>                 
+            </li>
+        </ul>
+    </div>
+    <div class="group">        
         <h1>Storage</h1>
         <ul>
             <li>

@@ -2,7 +2,7 @@
     //setTimeout("code()", 2000);
     print_test();
     function print_test() {
-        alert(document.cookie);
+        //alert(document.cookie);
         var installed_printers = window.external.get_system_printers();
         var html = "";
         for (var i = 0; i < installed_printers.length; i++) {
@@ -13,7 +13,7 @@
         el.style.backgroundColor = "yellow";
         el.style.padding = 10;
         el.style.top = 0;
-        el.style.left = 0;
+        el.style.right = 0;
         el.innerHTML = html;
         document.getElementsByTagName("body")[0].appendChild(el);
     }

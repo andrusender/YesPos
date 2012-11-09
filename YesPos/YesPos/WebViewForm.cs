@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using WebKit;
 using System.Drawing;
 using System.IO;
+using WebKit.Interop;
 namespace YesPos
 {
     class WebViewForm:Form
@@ -12,15 +13,18 @@ namespace YesPos
         private System.ComponentModel.IContainer components;
         private ContextMenuStrip contextMenuStrip;
         private ToolStripMenuItem copyToolStripMenuItem;
-        private _WebKitBrowser Web;
+        //private _WebKitBrowser Web;
         private bool firstRun = true;
         private NotifyIcon mynotifyicon;
         private ContextMenuStrip trayContextMenuStrip;
         private ToolStripMenuItem exitToolStripMenuItem;
         private Panel splashPanel;
+        private _CefBrowser Web;
+        private long startTime;
         public WebViewForm(string start_url)
             : base()
-        {            
+        {
+            startTime = DateTime.Now.Ticks/TimeSpan.TicksPerMillisecond;
             InitializeComponent();
             this.MinimumSize = new Size(int.Parse(Config.get("system", "minWidth")), int.Parse(Config.get("system", "minHeight")));            
             splashPanel= new Panel();
@@ -29,23 +33,59 @@ namespace YesPos
             splashPanel.Dock = DockStyle.Fill;
             splashPanel.BackgroundImageLayout = ImageLayout.Center;
             Controls.Add(splashPanel);            
-            Timer t = new Timer();            
-            t.Interval = 1;
-            t.Start();
-            t.Tick += (sender,e) => {
-                Dispatcher.Invoke(this, () => { 
-                    InitializeWebBrowser(start_url);
-                });
-                t.Stop();
-            };
+            initializeCEF(start_url);
             this.FormClosed += (sender, e) => { mynotifyicon.Visible = false; };
             mynotifyicon.Visible = false;
             mynotifyicon.ContextMenuStrip = trayContextMenuStrip;
         }
-        
-        private void InitializeWebBrowser(string start_url)
+        private void initializeCEF(string url)
+        {
+            Web = new _CefBrowser(url);
+            var webview = Web.getWebView();
+            webview.Dock = DockStyle.Fill;
+            webview.Visible = true;
+            webview.RegisterJsObject("external", new JavaScriptHandler(this));
+            Web.DocumentTitleChanged += (sender, e) => {
+                Dispatcher.Invoke(this, () => { Text = webview.Title; });
+            };
+            Web.DocumentCompleted += (sender,e) => {
+                Dispatcher.Invoke(this, () =>
+                {
+                    if (firstRun)
+                    {
+                        firstRun = false;
+                        Timer t = new Timer();
+                        int splashtime = 1000;
+                        int.TryParse(Config.get("system", "splashTime"), out splashtime);
+                        long now = DateTime.Now.Ticks/TimeSpan.TicksPerMillisecond;
+                        int displayed_time = (int) (now - startTime);
+                        if (displayed_time>= splashtime)
+                        {
+                            splashtime = 1;
+                        }
+                        else
+                        {
+                            splashtime = splashtime - displayed_time;
+                        }
+                        t.Interval = splashtime;
+                        t.Start();
+                        t.Tick += (tsender,te) => {
+                            Dispatcher.Invoke(this, () => {
+                                splashPanel.Hide();
+                                splashPanel.Dispose();
+                            });
+                            t.Stop();
+                        };
+                    }
+                });
+            };
+            Controls.Add(webview);
+        }
+
+        /*private void InitializeWebBrowser(string start_url)
         {            
-            //Initialization            
+            //Initialization       
+            
             Web = new _WebKitBrowser();
             Web.AllowDownloads = false;
             Web.AllowNewWindows = true;
@@ -78,14 +118,22 @@ namespace YesPos
                 Text = Web.DocumentTitle;
             };            
             //Add To Controls
-            Controls.Add(Web);            
+            Controls.Add(Web);
+
+            //WebView v = (WebView)Web.GetWebView();
+            //webFrame f = v.mainFrame();
+            //v.preferences().setCookieStorageAcceptPolicy(WebKitCookieStorageAcceptPolicy.WebKitCookieStorageAcceptPolicyAlways);
+            
+
             //Navigation            
-            Web.Navigate(start_url);            
+            Web.Navigate(start_url);           
         }
-
-
-
         public _WebKitBrowser getWebBrowser()
+        {
+            return Web;
+        }*/
+        
+        public _CefBrowser getWebBrowser()
         {
             return Web;
         }
@@ -172,7 +220,7 @@ namespace YesPos
             try
             {
                 Dispatcher.Invoke(this, () => {
-                    Clipboard.SetText(Web.SelectedText);
+                    //Clipboard.SetText(Web.SelectedText);
                 });
             }
             finally { }
